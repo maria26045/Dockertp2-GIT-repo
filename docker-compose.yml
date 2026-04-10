@@ -1,0 +1,81 @@
+# services:
+#   database:
+#     build: ./database
+#     container_name: my-postgres
+#     environment:
+#       POSTGRES_DB: db
+#       POSTGRES_USER: usr
+#       POSTGRES_PASSWORD: pwd
+#     volumes:
+#       - pgdata:/var/lib/postgresql/data
+#     networks:
+#       - app-network
+#     restart: unless-stopped
+
+#   backend:
+#     build: ./backend/simpleapi
+#     container_name: my-backend-api
+#     depends_on:
+#       - database
+#     networks:
+#       - app-network
+#     restart: unless-stopped
+
+#   httpd:
+#     build: ./httpd
+#     container_name: my-httpd
+#     depends_on:
+#       - backend
+#     ports:
+#       - "8081:80"
+#     networks:
+#       - app-network
+#     restart: unless-stopped
+
+# networks:
+#   app-network:
+
+# volumes:
+#   pgdata:
+services:
+  database:
+    build: ./database
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend-network
+    restart: unless-stopped
+
+  backend:
+    build: ./backend/simpleapi
+    depends_on:
+      - database
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - backend-network
+      - frontend-network
+    restart: unless-stopped
+
+  httpd:
+    build: ./httpd
+    depends_on:
+      - backend
+    ports:
+      - "${HTTPD_PORT}:80"
+    networks:
+      - frontend-network
+    restart: unless-stopped
+
+networks:
+  backend-network:
+  frontend-network:
+
+volumes:
+  pgdata:
