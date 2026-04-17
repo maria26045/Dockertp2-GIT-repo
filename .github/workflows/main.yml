@@ -36,9 +36,6 @@ jobs:
       - name: Login to DockerHub
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
         
-      - name: test username
-        run:  echo "${{ secrets.DOCKERHUB_USERNAME }}" 
-
       - name: Build image and push backend
         uses: docker/build-push-action@v6
         with:
@@ -61,3 +58,10 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-httpd:latest
           #tags: maria26045/tp-devops-simple-api:latest
+      - name: Build, test and SonarCloud
+        run: mvn -B verify sonar:sonar \
+        -Dsonar.projectKey=maria26045_Dockertp2-GIT-repo \
+        -Dsonar.organization=maria26045 \
+        -Dsonar.host.url=https://sonarcloud.io \
+        -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+        --file ./backend/simpleapi/pom.xml
