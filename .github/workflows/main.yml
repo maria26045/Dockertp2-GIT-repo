@@ -66,20 +66,20 @@ jobs:
       - name: Build image and push backend
         uses: docker/build-push-action@v6
         with:
-          context: ./backend/simpleapi
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-simple-api:latest
+        context: ./backend/simpleapi
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-simple-api:latest
 
-      - name: Build image and push database
+        -name: Build image and push database
         uses: docker/build-push-action@v6
         with:
-          context: ./database
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-database:latest
+        context: ./database
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-database:latest
 
       - name: Build image and push httpd
         uses: docker/build-push-action@v6
         with:
-          context: ./httpd
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-httpd:latest
+        context: ./httpd
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/tp-devops-httpd:latest
