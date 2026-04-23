@@ -122,7 +122,13 @@ jobs:
         run: |
           ssh-keyscan -H mchineaud.takima.school >> ~/.ssh/known_hosts
 
-      - name: Run Ansible playbook
-        working-directory: ansible
+      - name: Check repository content
         run: |
+          pwd
+          ls
+          ls ansible
+
+      - name: Run Ansible playbook
+        run: |
+          cd ansible
           ansible-playbook -i inventories/setup.yml playbook.yml

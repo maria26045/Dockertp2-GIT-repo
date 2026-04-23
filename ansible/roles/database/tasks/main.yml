@@ -1,0 +1,17 @@
+- name: Run database container
+  community.docker.docker_container:
+    name: database
+    image: mariamarie/tp-devops-database:latest
+    state: started
+    restart_policy: always
+    docker_host: "unix:///var/run/docker.sock"
+    networks:
+      - name: app-network
+    env:
+      POSTGRES_DB: db
+      POSTGRES_USER: usr
+      POSTGRES_PASSWORD: pwd
+    ports:
+      - "5432:5432"
+  vars:
+    ansible_python_interpreter: /opt/docker_venv/bin/python

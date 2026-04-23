@@ -1,0 +1,17 @@
+- name: Run backend application
+  community.docker.docker_container:
+    name: backend
+    image: mariamarie/tp-devops-simple-api:latest
+    state: started
+    restart_policy: always
+    docker_host: "unix:///var/run/docker.sock"
+    networks:
+      - name: app-network
+    env:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/db
+      SPRING_DATASOURCE_USERNAME: usr
+      SPRING_DATASOURCE_PASSWORD: pwd
+    # ports:
+    #   - "8080:8080"
+  vars:
+    ansible_python_interpreter: /opt/docker_venv/bin/python
